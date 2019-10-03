@@ -13,7 +13,7 @@ final class App {
         PointConfiguration pointConfiguration = PointConfiguration.inMemory();
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.pointFacade);
         GameConfiguration gameConfiguration = GameConfiguration.inMemory(pointConfiguration.pointFacade, userConfiguration.userCheckers);
-        AuthConfiguration authConfiguration = AuthConfiguration.inMemory(userConfiguration.userFacade);
+        AuthConfiguration authConfiguration = AuthConfiguration.inMemory();
 
         AuthFacade authFacade = authConfiguration.authFacade;
 

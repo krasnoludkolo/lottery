@@ -21,7 +21,7 @@ public class AuthFacadeTest {
     public void init() {
         PointFacade pointFacade = PointConfiguration.inMemory().pointFacade;
         UserFacade userFacade = UserConfiguration.inMemory(pointFacade).userFacade;
-        this.authFacade = AuthConfiguration.inMemory(userFacade).authFacade;
+        this.authFacade = AuthConfiguration.inMemory().authFacade;
     }
 
     @Test
