@@ -30,7 +30,7 @@ final class AuthenticationCheckers {
                 .flatMap(this::booleanToEither);
     }
 
-    private Either<ActionError, Success> booleanToEither(Boolean value) {
+    private Either<ActionError, Success> booleanToEither(boolean value) {
         return value ? Either.right(new Success()) : Either.left(UserActionError.WRONG_PASSWORD);
     }
 
