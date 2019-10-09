@@ -8,6 +8,8 @@ import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserActionError;
 import io.vavr.control.Either;
 
+import java.util.UUID;
+
 final class AuthenticationCheckers {
 
     private final Repository<AuthUser> repository;
@@ -20,7 +22,7 @@ final class AuthenticationCheckers {
         this.tokenGenerator = tokenGenerator;
     }
 
-    Condition<ActionError> correctPassword(int id, String password) {
+    Condition<ActionError> correctPassword(UUID id, String password) {
         return () -> repository
                 .findOne(id)
                 .map(authUser -> passwordEncrypt.checkPassword(password, authUser.password))

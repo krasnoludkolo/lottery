@@ -4,11 +4,12 @@ import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryRepository<T extends Identifiable<Integer>> implements Repository<T> {
+public class InMemoryRepository<T extends Identifiable> implements Repository<T> {
 
-    private ConcurrentHashMap<Integer, T> map = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<UUID, T> map = new ConcurrentHashMap<>();
 
     @Override
     public T save(T t) {
@@ -17,7 +18,7 @@ public class InMemoryRepository<T extends Identifiable<Integer>> implements Repo
     }
 
     @Override
-    public Option<T> findOne(int id) {
+    public Option<T> findOne(UUID id) {
         return Option.of(map.get(id));
     }
 
@@ -27,7 +28,7 @@ public class InMemoryRepository<T extends Identifiable<Integer>> implements Repo
     }
 
     @Override
-    public Success delete(int id) {
+    public Success delete(UUID id) {
         map.remove(id);
         return new Success();
     }

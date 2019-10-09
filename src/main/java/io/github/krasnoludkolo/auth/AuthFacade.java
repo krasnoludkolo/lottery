@@ -5,6 +5,8 @@ import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.resolver.Resolver;
 import io.vavr.control.Either;
 
+import java.util.UUID;
+
 public final class AuthFacade {
 
     private final AuthenticationCheckers authenticationCheckers;
@@ -16,7 +18,7 @@ public final class AuthFacade {
         this.registration = registration;
     }
 
-    public Either<ActionError, ApiToken> login(int id, String password) {
+    public Either<ActionError, ApiToken> login(UUID id, String password) {
         return Resolver
                 .when(
                         authenticationCheckers.correctPassword(id, password)
@@ -30,7 +32,7 @@ public final class AuthFacade {
         return tokenGenerator.generate(register.getId()).perform();
     }
 
-    public Either<ActionError, Integer> getIdFromToken(ApiToken token) {
+    public Either<ActionError, UUID> getIdFromToken(ApiToken token) {
         return Resolver
                 .when(
                         authenticationCheckers.isTokenValid(token)

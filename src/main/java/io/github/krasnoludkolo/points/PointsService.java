@@ -5,6 +5,8 @@ import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Option;
 
+import java.util.UUID;
+
 final class PointsService {
 
     private Repository<Point> repository;
@@ -13,7 +15,7 @@ final class PointsService {
         this.repository = repository;
     }
 
-    Action<Success> addPointToUser(int userId) {
+    Action<Success> addPointToUser(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .map(Point::increase)
@@ -21,7 +23,7 @@ final class PointsService {
                 .get();
     }
 
-    Action<Success> subtractPointToUser(int userId) {
+    Action<Success> subtractPointToUser(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .map(Point::decrease)
@@ -29,7 +31,7 @@ final class PointsService {
                 .get();
     }
 
-    Action<Success> setUserPoints(int userId, int points) {
+    Action<Success> setUserPoints(UUID userId, int points) {
         return () -> repository
                 .findOne(userId)
                 .map(point -> point.setCount(points))
@@ -37,14 +39,14 @@ final class PointsService {
                 .get();
     }
 
-    Action<Integer> getUserPoints(int userId) {
+    Action<Integer> getUserPoints(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .map(p -> p.points)
                 .get();
     }
 
-    Action<Integer> createResultForUser(int id) {
+    Action<UUID> createResultForUser(UUID id) {
         return () -> Option.of(Point.create(id))
                 .map(repository::save)
                 .map(Point::getId)

@@ -1,11 +1,14 @@
 package io.github.krasnoludkolo.game.api;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public final class EndGameRequestDTO {
 
-    private int gameId;
-    private int userId;
+    private UUID gameId;
+    private UUID userId;
 
-    public EndGameRequestDTO(int gameId, int userId) {
+    public EndGameRequestDTO(UUID gameId, UUID userId) {
         this.gameId = gameId;
         this.userId = userId;
     }
@@ -13,19 +16,19 @@ public final class EndGameRequestDTO {
     public EndGameRequestDTO() {
     }
 
-    public int getGameId() {
+    public UUID getGameId() {
         return this.gameId;
     }
 
-    public int getUserId() {
+    public UUID getUserId() {
         return this.userId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(UUID gameId) {
         this.gameId = gameId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -38,12 +41,9 @@ public final class EndGameRequestDTO {
         return true;
     }
 
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        result = result * PRIME + this.getGameId();
-        result = result * PRIME + this.getUserId();
-        return result;
+        return Objects.hash(gameId, userId);
     }
 
     public String toString() {

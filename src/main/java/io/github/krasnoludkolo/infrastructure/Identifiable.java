@@ -1,9 +1,10 @@
 package io.github.krasnoludkolo.infrastructure;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-public interface Identifiable<T> extends Serializable {
+public interface Identifiable extends Serializable {
 
-    T getId();
+    UUID getId();
 
 }

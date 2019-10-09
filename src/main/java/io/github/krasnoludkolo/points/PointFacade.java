@@ -6,6 +6,8 @@ import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Either;
 
+import java.util.UUID;
+
 public class PointFacade {
 
     private final PointsService pointsService;
@@ -16,7 +18,7 @@ public class PointFacade {
         this.pointCheckers = pointCheckers;
     }
 
-    public Either<ActionError, Success> addPointToUser(int userId) {
+    public Either<ActionError, Success> addPointToUser(UUID userId) {
         return Resolver
                 .when(
                         pointCheckers.userExists(userId)
@@ -26,7 +28,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<ActionError, Integer> getUserPoints(int userId) {
+    public Either<ActionError, Integer> getUserPoints(UUID userId) {
         return Resolver
                 .when(
                         pointCheckers.userExists(userId)
@@ -36,7 +38,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<ActionError, Integer> createResultForUser(int id) {
+    public Either<ActionError, UUID> createResultForUser(UUID id) {
         return Resolver
                 .when(
                         pointCheckers.userNotExists(id)

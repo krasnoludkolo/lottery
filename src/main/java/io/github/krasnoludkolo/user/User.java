@@ -4,23 +4,25 @@ import io.github.krasnoludkolo.infrastructure.Identifiable;
 import io.github.krasnoludkolo.user.api.UserDTO;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-final class User implements Identifiable<Integer>, Serializable {
+final class User implements Identifiable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int id;
+    private final UUID id;
     final boolean isAdmin;
 
-    static User createNormal(int id) {
+    static User createNormal() {
+        UUID id = UUID.randomUUID();
         return new User(id, false);
     }
 
-    static User createAdmin(int id) {
+    static User createAdmin(UUID id) {
         return new User(id, true);
     }
 
-    private User(int id, boolean isAdmin) {
+    private User(UUID id, boolean isAdmin) {
         this.id = id;
         this.isAdmin = isAdmin;
     }
@@ -34,7 +36,7 @@ final class User implements Identifiable<Integer>, Serializable {
     }
 
     @Override
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 }

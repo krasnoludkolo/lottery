@@ -6,6 +6,8 @@ import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserActionError;
 
+import java.util.UUID;
+
 public class UserCheckers {
 
     private Repository<User> repository;
@@ -14,7 +16,7 @@ public class UserCheckers {
         this.repository = repository;
     }
 
-    public Condition<ActionError> isAdmin(int userId) {
+    public Condition<ActionError> isAdmin(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .filter(user -> user.isAdmin)
@@ -22,7 +24,7 @@ public class UserCheckers {
                 .map(Success::new);
     }
 
-    public Condition<ActionError> userExists(int userId) {
+    public Condition<ActionError> userExists(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .toEither((ActionError) UserActionError.USER_NOT_FOUND)

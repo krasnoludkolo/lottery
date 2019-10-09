@@ -3,17 +3,18 @@ package io.github.krasnoludkolo.points;
 import io.github.krasnoludkolo.infrastructure.Identifiable;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-final class Point implements Identifiable<Integer>, Serializable {
+final class Point implements Identifiable, Serializable {
 
     final int points;
-    private final int userId;
+    private final UUID userId;
 
-    static Point create(int userId) {
+    static Point create(UUID userId) {
         return new Point(0, userId);
     }
 
-    private Point(int points, int userId) {
+    private Point(int points, UUID userId) {
         this.points = points;
         this.userId = userId;
     }
@@ -33,8 +34,8 @@ final class Point implements Identifiable<Integer>, Serializable {
     }
 
     @Override
-    public Integer getId() {
-        return points;
+    public UUID getId() {
+        return userId;
     }
 
 }

@@ -7,6 +7,8 @@ import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Either;
 
+import java.util.UUID;
+
 final class GameCheckers {
 
     private final Repository<Game> repository;
@@ -16,7 +18,7 @@ final class GameCheckers {
         this.repository = repository;
     }
 
-    public Condition<ActionError> gameExists(int gameId) {
+    public Condition<ActionError> gameExists(UUID gameId) {
         return () -> repository
                 .findOne(gameId)
                 .toEither((ActionError) GameActionError.GAME_NOT_FOUND)
@@ -27,15 +29,15 @@ final class GameCheckers {
         return () -> evaluateBoolean(maxNumber > 0, GameActionError.IMPOSSIBLE_BET);
     }
 
-    public Condition<ActionError> isBetPossible(int bet, int gameId) {
+    public Condition<ActionError> isBetPossible(int betValue, UUID gameId) {
         return () -> repository
                 .findOne(gameId)
-                .map(game -> game.isBetPossible(bet))
+                .map(game -> game.isBetPossible(betValue))
                 .toEither((ActionError) GameActionError.GAME_NOT_FOUND)
                 .flatMap(possible -> evaluateBoolean(possible, GameActionError.IMPOSSIBLE_BET));
     }
 
-    public Condition<ActionError> canEndGame(int gameId, int userId) {
+    public Condition<ActionError> canEndGame(UUID gameId, UUID userId) {
         return () -> repository
                 .findOne(gameId)
                 .map(game -> game.canEndGame(userId))

@@ -10,6 +10,8 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
+import java.util.UUID;
+
 public final class GameFacade {
 
     private final UserCheckers userCheckers;
@@ -22,7 +24,7 @@ public final class GameFacade {
         this.gameService = gameService;
     }
 
-    public Either<ActionError, GameDTO> createGame(int maxNumber, int gameCreatorId) {
+    public Either<ActionError, GameDTO> createGame(int maxNumber, UUID gameCreatorId) {
         return Resolver
                 .when(
                         gameCheckers.isMaxNumberValid(maxNumber),
@@ -61,7 +63,7 @@ public final class GameFacade {
                 );
     }
 
-    public Option<GameDTO> getGameById(int id) {
+    public Option<GameDTO> getGameById(UUID id) {
         return gameService.getGameById(id);
     }
 

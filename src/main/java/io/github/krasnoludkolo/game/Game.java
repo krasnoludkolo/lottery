@@ -12,24 +12,22 @@ import io.vavr.collection.Map;
 
 import java.io.Serializable;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
-class Game implements Identifiable<Integer>, Serializable {
+class Game implements Identifiable, Serializable {
 
-    private final int id;
+    private final UUID id;
     private final int maxNumber;
-    private final Map<Integer, Bet> bets;
+    private final Map<UUID, Bet> bets;
     private final Random random;
-    private final List<Integer> admins;
+    private final List<UUID> admins;
 
-    private static AtomicInteger currentId = new AtomicInteger(0); //for simplicity
-
-    static Game create(int maxNumber, Random random, int gameCreatorId) {
-        int id = currentId.getAndIncrement();
+    static Game create(int maxNumber, Random random, UUID gameCreatorId) {
+        UUID id = UUID.randomUUID();
         return new Game(id, maxNumber, HashMap.empty(), random, List.of(gameCreatorId));
     }
 
-    private Game(int id, int maxNumber, Map<Integer, Bet> bets, Random random, List<Integer> adminsList) {
+    private Game(UUID id, int maxNumber, Map<UUID, Bet> bets, Random random, List<UUID> adminsList) {
         this.id = id;
         this.maxNumber = maxNumber;
         this.bets = bets;
@@ -52,7 +50,7 @@ class Game implements Identifiable<Integer>, Serializable {
 
     Game addBet(NewBetDTO newBet) {
         Bet bet = Bet.from(newBet);
-        Map<Integer, Bet> newBetMap = bets.put(newBet.userId, bet);
+        Map<UUID, Bet> newBetMap = bets.put(newBet.userId, bet);
         return new Game(id, maxNumber, newBetMap, random, admins);
     }
 
@@ -62,11 +60,11 @@ class Game implements Identifiable<Integer>, Serializable {
 
     private FinishedGame resolveThisGame() {
         int winningNumber = random.nextInt(maxNumber) + 1;
-        List<Integer> winners = getWinners(winningNumber);
+        List<UUID> winners = getWinners(winningNumber);
         return new FinishedGame(winners, winningNumber);
     }
 
-    private List<Integer> getWinners(int winningNumber) {
+    private List<UUID> getWinners(int winningNumber) {
         return bets
                 .filterValues(bet -> bet.correct(winningNumber))
                 .keySet()
@@ -74,20 +72,20 @@ class Game implements Identifiable<Integer>, Serializable {
     }
 
     @Override
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    boolean canEndGame(int userId) {
+    boolean canEndGame(UUID userId) {
         return admins.contains(userId);
     }
 
     class FinishedGame extends Game {
 
-        private final List<Integer> winners;
+        private final List<UUID> winners;
         private final int winnerNumber;
 
-        private FinishedGame(List<Integer> winners, int winnerNumber) {
+        private FinishedGame(List<UUID> winners, int winnerNumber) {
             super(id, maxNumber, bets, random, admins);
             this.winners = winners;
             this.winnerNumber = winnerNumber;
@@ -115,7 +113,7 @@ class Game implements Identifiable<Integer>, Serializable {
         }
 
         @Override
-        boolean canEndGame(int userId) {
+        boolean canEndGame(UUID userId) {
             return false;
         }
     }

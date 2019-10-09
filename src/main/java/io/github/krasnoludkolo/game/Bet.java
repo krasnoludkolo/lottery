@@ -3,16 +3,18 @@ package io.github.krasnoludkolo.game;
 import io.github.krasnoludkolo.game.api.BetDTO;
 import io.github.krasnoludkolo.game.api.NewBetDTO;
 
+import java.util.UUID;
+
 final class Bet {
 
-    private int userId;
+    private UUID userId;
     private int bet;
 
     static Bet from(NewBetDTO dto) {
         return new Bet(dto.userId, dto.bet);
     }
 
-    private Bet(int userId, int bet) {
+    private Bet(UUID userId, int bet) {
         this.userId = userId;
         this.bet = bet;
     }

@@ -6,6 +6,8 @@ import io.github.krasnoludkolo.points.api.PointsActionError;
 import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
 
+import java.util.UUID;
+
 public class PointCheckers {
 
     private final Repository<Point> repository;
@@ -14,7 +16,7 @@ public class PointCheckers {
         this.repository = repository;
     }
 
-    public Condition<ActionError> userNotExists(int userId) {
+    public Condition<ActionError> userNotExists(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .map(p -> (ActionError) PointsActionError.USER_EXISTS)
@@ -22,7 +24,7 @@ public class PointCheckers {
                 .swap();
     }
 
-    public Condition<ActionError> userExists(int userId) {
+    public Condition<ActionError> userExists(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .toEither((ActionError) PointsActionError.USER_NOT_FOUND)

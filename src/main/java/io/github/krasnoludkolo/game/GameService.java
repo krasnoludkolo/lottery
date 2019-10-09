@@ -9,6 +9,7 @@ import io.vavr.collection.List;
 import io.vavr.control.Option;
 
 import java.util.Random;
+import java.util.UUID;
 
 final class GameService {
 
@@ -31,7 +32,7 @@ final class GameService {
                 .get();
     }
 
-    Action<GameDTO> endGame(int id) {
+    Action<GameDTO> endGame(UUID id) {
         return () -> repository
                 .findOne(id)
                 .map(g -> g.endGame(pointFacade))
@@ -40,7 +41,7 @@ final class GameService {
                 .get();
     }
 
-    Action<GameDTO> createGame(int maxNumber, int gameCreatorId) {
+    Action<GameDTO> createGame(int maxNumber, UUID gameCreatorId) {
         return () -> Option.of(Game.create(maxNumber, random, gameCreatorId))
                 .map(repository::save)
                 .map(Game::toDTO)
@@ -53,7 +54,7 @@ final class GameService {
                 .map(Game::toDTO);
     }
 
-    Option<GameDTO> getGameById(int id) {
+    Option<GameDTO> getGameById(UUID id) {
         return repository
                 .findOne(id)
                 .map(Game::toDTO);

@@ -6,6 +6,8 @@ import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserDTO;
 
+import java.util.UUID;
+
 final class UserService {
 
     private Repository<User> repository;
@@ -16,7 +18,7 @@ final class UserService {
         this.pointFacade = pointFacade;
     }
 
-    Action<Success> promoteToAdmin(int userId) {
+    Action<Success> promoteToAdmin(UUID userId) {
         return () -> repository
                 .findOne(userId)
                 .map(User::promoteToAdmin)
@@ -24,24 +26,24 @@ final class UserService {
                 .get();
     }
 
-    Action<UserDTO> createUser(int id) {
+    Action<UserDTO> createUser() {
         return () -> {
-            User user = User.createNormal(id);
-            pointFacade.createResultForUser(id);
+            User user = User.createNormal();
+            pointFacade.createResultForUser(user.getId());
             return repository
                     .save(user)
                     .toDTO();
         };
     }
 
-    Action<UserDTO> getUserInfo(int id) {
+    Action<UserDTO> getUserInfo(UUID id) {
         return () -> repository
                 .findOne(id)
                 .map(User::toDTO)
                 .get();
     }
 
-    Action<UserDTO> createAdmin(int id) {
+    Action<UserDTO> createAdmin(UUID id) {
         return () -> {
             User user = User.createAdmin(id);
             pointFacade.createResultForUser(id);

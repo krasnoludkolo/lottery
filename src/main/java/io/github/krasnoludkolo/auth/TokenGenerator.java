@@ -8,18 +8,20 @@ import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 
+import java.util.UUID;
+
 final class TokenGenerator {
 
-    Action<ApiToken> generate(int id) {
-        return () -> new ApiToken(String.valueOf(id));
+    Action<ApiToken> generate(UUID id) {
+        return () -> new ApiToken(id.toString());
     }
 
-    Action<Integer> getIdFromToken(ApiToken token) {
-        return () -> Integer.parseInt(token.token);
+    Action<UUID> getIdFromToken(ApiToken token) {
+        return () -> UUID.fromString(token.token);
     }
 
     public Either<ActionError, Success> isTokenValid(ApiToken token) {
-        return Try.of(() -> Integer.parseInt(token.token))
+        return Try.of(() -> UUID.fromString(token.token))
                 .toEither()
                 .map(Success::new)
                 .mapLeft(x -> UserAuthError.INVALID_TOKEN);

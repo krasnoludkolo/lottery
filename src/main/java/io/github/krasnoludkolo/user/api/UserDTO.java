@@ -1,16 +1,18 @@
 package io.github.krasnoludkolo.user.api;
 
+import java.util.UUID;
+
 public final class UserDTO {
 
-    private int id;
+    private UUID id;
     private boolean isAdmin;
 
-    public UserDTO(int id, boolean isAdmin) {
+    public UserDTO(UUID id, boolean isAdmin) {
         this.id = id;
         this.isAdmin = isAdmin;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 

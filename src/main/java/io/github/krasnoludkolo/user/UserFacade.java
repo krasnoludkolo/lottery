@@ -8,6 +8,8 @@ import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserDTO;
 import io.vavr.control.Either;
 
+import java.util.UUID;
+
 public class UserFacade {
 
     private UserService userService;
@@ -18,23 +20,22 @@ public class UserFacade {
         this.userService = new UserService(repository, pointFacade);
     }
 
-    public UserDTO createUserWithId(int id) {
+    public UserDTO createUser() {
         return Resolver
                 .perform(
-                        userService.createUser(id)
+                        userService.createUser()
 
                 );
     }
 
-    public UserDTO createAdminWithId(int id) {
+    public UserDTO createAdminWithId(UUID id) {
         return Resolver
                 .perform(
                         userService.createAdmin(id)
-
                 );
     }
 
-    public Either<ActionError, UserDTO> getUserInfo(int id) {
+    public Either<ActionError, UserDTO> getUserInfo(UUID id) {
         return Resolver
                 .when(
                         userCheckers.userExists(id)
@@ -44,7 +45,7 @@ public class UserFacade {
                 );
     }
 
-    public Either<ActionError, Success> promoteToAdmin(int promoterId, int userId) {
+    public Either<ActionError, Success> promoteToAdmin(UUID promoterId, UUID userId) {
         return Resolver
                 .when(
                         userCheckers.userExists(promoterId),

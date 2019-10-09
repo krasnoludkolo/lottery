@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,8 +38,8 @@ public class GameFacadeTest {
 
     @Test
     public void shouldCreateAndGetGame() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        Integer id = gameFacade
+        UUID creatorId = userFacade.createUser().getId();
+        UUID id = gameFacade
                 .createGame(10, creatorId)
                 .get()
                 .getId();
@@ -48,13 +49,13 @@ public class GameFacadeTest {
 
     @Test
     public void shouldNotGetNotExistingGame() {
-        Option<GameDTO> gameById = gameFacade.getGameById(1);
+        Option<GameDTO> gameById = gameFacade.getGameById(UUID.randomUUID());
         assertTrue(gameById.isEmpty());
     }
 
     @Test
     public void shouldGetAllCreatedGames() {
-        int creatorId = userFacade.createUserWithId(0).getId();
+        UUID creatorId = userFacade.createUser().getId();
         gameFacade.createGame(1, creatorId);
         gameFacade.createGame(1, creatorId);
         gameFacade.createGame(1, creatorId);
@@ -65,8 +66,8 @@ public class GameFacadeTest {
 
     @Test
     public void shouldNewGameHasEmptyBetList() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        int id = gameFacade.createGame(1, creatorId).get().getId();
+        UUID creatorId = userFacade.createUser().getId();
+        UUID id = gameFacade.createGame(1, creatorId).get().getId();
 
         int size = gameFacade.getGameById(id).get().getUsersBet().size();
 
@@ -75,9 +76,9 @@ public class GameFacadeTest {
 
     @Test
     public void shouldAddBet() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        int userId = userFacade.createUserWithId(1).getId();
-        int gameId = gameFacade.createGame(2, creatorId).get().getId();
+        UUID creatorId = userFacade.createUser().getId();
+        UUID userId = userFacade.createUser().getId();
+        UUID gameId = gameFacade.createGame(2, creatorId).get().getId();
 
         gameFacade.addBet(new NewBetDTO(gameId, userId, LOOSING_BET));
 
@@ -88,8 +89,8 @@ public class GameFacadeTest {
 
     @Test
     public void shouldEndedGameReturningFinishGameDTO() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        int id = gameFacade.createGame(10, creatorId).get().getId();
+        UUID creatorId = userFacade.createUser().getId();
+        UUID id = gameFacade.createGame(10, creatorId).get().getId();
 
         gameFacade.endGame(new EndGameRequestDTO(id, creatorId));
 
@@ -99,11 +100,11 @@ public class GameFacadeTest {
 
     @Test
     public void shouldNotBeAbleToMakeImpossibleBet() {
-        int creatorId = userFacade.createUserWithId(0).getId();
+        UUID creatorId = userFacade.createUser().getId();
         int maxNumber = 5;
         int impossibleBet = maxNumber + 1;
-        int game = gameFacade.createGame(maxNumber, creatorId).get().getId();
-        int user = userFacade.createUserWithId(1).getId();
+        UUID game = gameFacade.createGame(maxNumber, creatorId).get().getId();
+        UUID user = userFacade.createUser().getId();
 
         ActionError error = gameFacade.addBet(new NewBetDTO(game, user, impossibleBet)).getLeft();
 
@@ -112,8 +113,8 @@ public class GameFacadeTest {
 
     @Test
     public void shouldWinningNumberBeInResult() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        int game = gameFacade.createGame(5, creatorId).get().getId();
+        UUID creatorId = userFacade.createUser().getId();
+        UUID game = gameFacade.createGame(5, creatorId).get().getId();
 
         gameFacade.endGame(new EndGameRequestDTO(game, creatorId));
 
@@ -123,9 +124,9 @@ public class GameFacadeTest {
 
     @Test
     public void shouldWinWithWinningBet() {
-        int creatorId = userFacade.createUserWithId(0).getId();
-        int game = gameFacade.createGame(5, creatorId).get().getId();
-        int user = userFacade.createUserWithId(1).getId();
+        UUID creatorId = userFacade.createUser().getId();
+        UUID game = gameFacade.createGame(5, creatorId).get().getId();
+        UUID user = userFacade.createUser().getId();
 
         gameFacade.addBet(new NewBetDTO(game, user, WINNING_BET));
         gameFacade.endGame(new EndGameRequestDTO(game, creatorId));
@@ -136,9 +137,9 @@ public class GameFacadeTest {
 
     @Test
     public void shouldSuperAdminBeAbleToEndGame() {
-        int admin = userFacade.createAdminWithId(0).getId();
-        int creator = userFacade.createUserWithId(1).getId();
-        int game = gameFacade.createGame(1, creator).get().getId();
+        UUID admin = userFacade.createAdminWithId(UUID.randomUUID()).getId();
+        UUID creator = userFacade.createUser().getId();
+        UUID game = gameFacade.createGame(1, creator).get().getId();
 
         Either<ActionError, GameDTO> endGame = gameFacade.endGame(new EndGameRequestDTO(game, admin));
 
@@ -147,9 +148,9 @@ public class GameFacadeTest {
 
     @Test
     public void shouldNotNormalBeAbleToEndGame() {
-        int normal = userFacade.createUserWithId(0).getId();
-        int creator = userFacade.createUserWithId(1).getId();
-        int game = gameFacade.createGame(1, creator).get().getId();
+        UUID normal = userFacade.createUser().getId();
+        UUID creator = userFacade.createUser().getId();
+        UUID game = gameFacade.createGame(1, creator).get().getId();
 
         ActionError error = gameFacade.endGame(new EndGameRequestDTO(game, normal)).getLeft();
 
@@ -158,8 +159,8 @@ public class GameFacadeTest {
 
     @Test
     public void shouldCreatorBeAbleToEndGame() {
-        int creator = userFacade.createUserWithId(1).getId();
-        int game = gameFacade.createGame(1, creator).get().getId();
+        UUID creator = userFacade.createUser().getId();
+        UUID game = gameFacade.createGame(1, creator).get().getId();
 
         Either<ActionError, GameDTO> endGame = gameFacade.endGame(new EndGameRequestDTO(game, creator));
 

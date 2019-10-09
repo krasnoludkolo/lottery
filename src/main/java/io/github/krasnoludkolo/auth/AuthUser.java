@@ -3,27 +3,25 @@ package io.github.krasnoludkolo.auth;
 import io.github.krasnoludkolo.infrastructure.Identifiable;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
-final class AuthUser implements Identifiable<Integer>, Serializable {
+final class AuthUser implements Identifiable, Serializable {
 
-    private final int id;
+    private final UUID id;
     final String password;
 
-    private static AtomicInteger currentId = new AtomicInteger(0); //for simplicity
-
     static AuthUser create(String password) {
-        int id = currentId.getAndIncrement();
+        UUID id = UUID.randomUUID();
         return new AuthUser(id, password);
     }
 
-    private AuthUser(int id, String password) {
+    private AuthUser(UUID id, String password) {
         this.id = id;
         this.password = password;
     }
 
     @Override
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 }
